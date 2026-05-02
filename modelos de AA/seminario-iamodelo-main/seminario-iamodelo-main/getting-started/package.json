@@ -1,0 +1,22 @@
+{
+  "name": "tfjs-examples-micro",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "private": true,
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "watch": "npm run build && npx http-server dist -p 1234",
+    "build": "if not exist dist mkdir dist && copy index.html dist && copy index.js dist"
+  },
+  "devDependencies": {
+    "clang-format": "^1.8.0",
+    "http-server": "^14.1.1"
+  },
+  "resolutions": {
+    "follow-redirects": "1.14.8"
+  }
+}

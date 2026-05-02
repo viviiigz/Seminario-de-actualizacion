@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Alumnos (Parte 1)</title>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; padding: 20px; }
+        .formulario { margin-bottom: 20px; padding: 15px; background: #f0f2f5; border-radius: 8px; max-width: 400px;}
+        input { display: block; margin-bottom: 10px; padding: 8px; width: 90%; }
+        button { background: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+        table { width: 100%; max-width: 600px; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <h2>Cargar Nuevo Alumno</h2>
+    <div class="formulario">
+        <form id="formAlumno">
+            <input type="text" id="nombre" placeholder="Nombre del alumno" required>
+            <input type="number" id="edad" placeholder="Edad" required>
+            <input type="number" id="nota" placeholder="Nota" step="0.1" required>
+            <button type="submit">Guardar Alumno</button>
+        </form>
+    </div>
+
+    <h2>Listado de Alumnos (Ordenados)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody id="tablaAlumnos">
+            </tbody>
+    </table>
+
+    <script>
+        // PASO 1: Qué hacer cuando la página termina de cargar
+        window.onload = function() {
+            // Buscamos en el "cajón" del navegador si ya hay alumnos guardados.
+            // Si hay texto, lo convertimos a lista (JSON.parse). Si no hay nada, creamos una lista vacía [].
+            let alumnosGuardados = JSON.parse(localStorage.getItem("misAlumnos")) || [];
+
+            // Ordenamos la lista: Primero por nota (mayor a menor). Si la nota es igual, por nombre (A-Z).
+            alumnosGuardados.sort(function(a, b) {
+                if (b.nota !== a.nota) {
+                    return b.nota - a.nota; // Ordena por nota descendente
+                } else {
+                    return a.nombre.localeCompare(b.nombre); // localeCompare ordena alfabéticamente
+                }
+            });
+
+            // Dibujamos la lista ordenada en la tabla HTML
+            let tbody = document.getElementById("tablaAlumnos");
+            for (let i = 0; i < alumnosGuardados.length; i++) {
+                let fila = `<tr>
+                                <td>${alumnosGuardados[i].nombre}</td>
+                                <td>${alumnosGuardados[i].edad}</td>
+                                <td>${alumnosGuardados[i].nota}</td>
+                            </tr>`;
+                tbody.innerHTML += fila; // Agregamos la fila a la tabla
+            }
+        };
+
+        // PASO 2: Qué hacer cuando el usuario hace clic en "Guardar Alumno"
+        document.getElementById("formAlumno").addEventListener("submit", function(evento) {
+            evento.preventDefault(); // Evitamos que el formulario haga cosas raras por defecto
+
+            // Capturamos lo que el usuario escribió
+            let nombre = document.getElementById("nombre").value;
+            let edad = parseInt(document.getElementById("edad").value);
+            let nota = parseFloat(document.getElementById("nota").value);
+
+            // Traemos la lista actual del cajón secreto
+            let alumnos = JSON.parse(localStorage.getItem("misAlumnos")) || [];
+
+            // Empujamos (push) el nuevo alumno a la lista como un Objeto
+            alumnos.push({ nombre: nombre, edad: edad, nota: nota });
+
+            // Volvemos a guardar la lista actualizada en el cajón (convirtiéndola a texto con stringify)
+            localStorage.setItem("misAlumnos", JSON.stringify(alumnos));
+
+            // La consigna dice explícitamente: "cada vez que se cargue un alumno muestre (recargue la página)"
+            window.location.reload(); 
+        });
+    </script>
+</body>
+</html>

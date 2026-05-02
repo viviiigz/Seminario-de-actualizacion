@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Alumnos (Backend)</title>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; padding: 20px; }
+        .formulario { margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; max-width: 400px;}
+        input { display: block; margin-bottom: 10px; padding: 8px; width: 90%; }
+        button { background: #0d6efd; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+        table { width: 100%; max-width: 600px; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <h2>Cargar Nuevo Alumno (Guardado en Servidor)</h2>
+    <div class="formulario">
+        <form id="formAlumno">
+            <input type="text" id="nombre" placeholder="Nombre del alumno" required>
+            <input type="number" id="edad" placeholder="Edad" required>
+            <input type="number" id="nota" placeholder="Nota" step="0.1" required>
+            <button type="submit">Guardar Alumno</button>
+        </form>
+    </div>
+
+    <h2>Mis Alumnos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody id="tablaAlumnos"></tbody>
+    </table>
+
+    <script>
+        const form = document.getElementById("dataForm");
+const dataList = document.getElementById("dataList");
+
+// creamos un código único para esta computadora
+// así el servidor sabe qué alumnos devolverte a vos y cuáles a otra persona
+let miId = localStorage.getItem("usuario_id");
+if (!miId) {
+    miId = "user_" + Math.random(); // inventa un código al azar
+    localStorage.setItem("usuario_id", miId);
+}
+
+// cargar los datos apenas se abre la página
+document.addEventListener("DOMContentLoaded", loadData);
+
+// acción al presionar el botón de guardar
+form.addEventListener("submit", async function (event) {
+  event.preventDefault(); 
+
+  const studentInfo = {
+    name: document.getElementById("name").value,
+    age: document.getElementById("age").value,
+    grades: parseFloat(document.getElementById("grades").value), // convertimos a número para poder ordenar
+  };
+
+  // enviar la información al servidor, incluyendo nuestro identificador único
+  await fetch("/api/estudiantes", {
+    method: "POST",
+    headers: { 
+        "Content-Type": "application/json",
+        "mi-identificador": miId 
+    },
+    body: JSON.stringify(studentInfo),
+  });
+
+  //  cumplimos la consigna: en vez de limpiar el form, RECARGAMOS la página
+  window.location.reload();
+});
+
+// pedir los datos al servidor para mostrarlos
+async function loadData() {
+  // Le pedimos al servidor SOLAMENTE nuestros datos enviando el identificador único en las cabeceras
+  const respuesta = await fetch("/api/estudiantes", {
+      headers: { "mi-identificador": miId }
+  });
+  const records = await respuesta.json();
+
+  // cumplimos la consigna: ORDENAR por nota (mayor a menor) y luego por nombre
+  records.sort(function(a, b) {
+      if (b.grades !== a.grades) {
+          return b.grades - a.grades; 
+      } else {
+          return a.name.localeCompare(b.name); 
+      }
+  });
+
+  dataList.innerHTML = ""; 
+  records.forEach(function (record) {
+    displayRecord(record);
+  });
+}
+
+// crear la tarjeta visual en la pantalla
+function displayRecord(studentInfo) {
+  const card = document.createElement("div");
+  card.className = "record-card";
+  card.innerHTML = `
+        <p><strong>Nombre:</strong> ${studentInfo.name}</p>
+        <p><strong>Edad:</strong> ${studentInfo.age}</p>
+        <p><strong>Notas:</strong> ${studentInfo.grades}</p>
+        <hr>
+    `;
+  dataList.appendChild(card);
+}
+
+       
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+Crear un sitio web simple que contenga:
+
+1️⃣ Caja de texto
+
+Una donde el usuario pueda escribir cualquier texto.
+
+Cuando el usuario presione la tecla , el sistema deberá:
+mostrar una ventana emergente
+mostrando el texto que fue ingresado en la caja.
+
+2️⃣ Botón para cambiar colores
+
+Debajo de la caja de texto deberá existir un .
+
+Cada vez que el usuario haga click en el botón, se deberá modificar el , alternando entre los siguientes estados:
+
+     - fondo blanco -  texto negro 
+     - fondo negro -  texto blanco
+     - fondo  celeste -  texto rojo
+
+Modalidades de implementación
+
+El mismo ejercicio deberá implementarse en .
+
+Implementación 1 - Implementación con JavaScript puro (sin servidor web)
+
+En esta versión se deberá desarrollar una página utilizando únicamente:
+HTML
+JavaScript
+El archivo deberá llamarse por ejemplo:
+
+index.html
+
+Este archivo deberá poder ejecutarse , sin necesidad de ejecutar ningún servidor web.

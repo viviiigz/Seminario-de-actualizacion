@@ -1,0 +1,20 @@
+body {
+    text-align: center;
+    padding-top: 50px;
+    font-family: Arial, sans-serif;
+}
+
+.estado-0 { 
+    background-color: white; 
+    color: black; 
+}
+
+.estado-1 { 
+    background-color: black; 
+    color: white; 
+}
+
+.estado-2 { 
+    background-color: lightblue; 
+    color: red; 
+}

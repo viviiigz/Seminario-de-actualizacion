@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</head>
+<body>
+    <h2>modelo y = 2x + 6</h2>
+    
+    <div id="estado">entrenando el modelo, por favor espera...</div>
+    
+    <br>
+
+    <label>ingresa x: </label>
+    <input type="number" id="input_x">
+    <button id="btn_predecir" onclick="predecirUsuario()" disabled>predecir</button>
+
+    <br><br>
+
+    <div id="resultado"></div>
+
+    <script>
+        // variable global para guardar nuestro modelo
+        let model;
+
+        // funcion principal que entrena a la ia
+        async function learnLinear() {
+            
+            // creamos el modelo vacio
+            model = tf.sequential(); 
+            
+            // agregamos una capa simple
+            model.add(tf.layers.dense({units: 1, inputShape: [1]})); 
+
+            // preparamos el modelo para aprender
+            model.compile({
+                loss: 'meanSquaredError', 
+                optimizer: 'sgd'
+            }); 
+
+            // datos de x y de y
+            const xs = tf.tensor2d([-6, -5, -4, -3, -2, -1, 0, 1, 2], [9, 1]); 
+            const ys = tf.tensor2d([-6, -4, -2, 0, 2, 4, 6, 8, 10], [9, 1]); 
+
+            // entrenamos por 350 epocas
+            await model.fit(xs, ys, {epochs: 350}); 
+
+            // cambiamos el texto cuando termina de entrenar
+            document.getElementById('estado').innerText = "¡el modelo ya esta listo!";
+            
+            // desbloqueamos el boton para que se pueda hacer clic
+            document.getElementById('btn_predecir').disabled = false;
+        }
+        
+        // funcion que se activa al tocar el boton
+        function predecirUsuario() {
+            
+            // leemos el numero que escribio el usuario
+            let valorX = parseFloat(document.getElementById('input_x').value);
+
+            // comprobamos que no este vacio
+            if(isNaN(valorX)) {
+                alert("por favor ingresa un numero");
+                return;
+            }
+
+            // le pedimos al modelo que adivine
+            let prediccion = model.predict(tf.tensor2d([valorX], [1, 1]));
+
+            // sacamos el numero del tensor y lo mostramos en pantalla
+            let resultadoY = prediccion.dataSync()[0];
+            document.getElementById('resultado').innerText = "el valor de y es: " + resultadoY.toFixed(2);
+        }
+
+        // arrancamos el entrenamiento apenas se abre la pagina
+        learnLinear();
+    </script>
+</body>
+</html>
