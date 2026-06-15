@@ -1,0 +1,96 @@
+/* ===========================================================
+   estilos.css
+   estilos generales de la pagina, separados del html y del js
+   para mantener cada cosa en su lugar (estructura, estilo,
+   y comportamiento por separado).
+   =========================================================== */
+
+/* estilos base del body: tipografia, fondo y margenes */
+body {
+    font-family: arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+/* tarjeta blanca central que envuelve todo el contenido */
+.contenedor {
+    max-width: 800px;        /* ancho maximo de la tarjeta */
+    margin: 0 auto;          /* centra la tarjeta horizontalmente */
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* sombra suave */
+}
+
+/* color de los titulos */
+h1, h2 {
+    color: #222;
+}
+
+/* lineas separadoras entre secciones */
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+/* estilo base para todos los botones */
+.boton {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* boton verde, usado para "entrenar modelo" y "predecir" */
+.boton-verde {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+
+/* cambia el color cuando el mouse esta encima del boton */
+.boton-verde:hover {
+    background-color: #43a047;
+}
+
+/* contenedor del grafico: le da un alto fijo para que no se deforme */
+.contenedor-grafico {
+    height: 300px;
+    margin-top: 15px;
+}
+
+/* fila donde van el input de x y el boton de predecir, uno al lado del otro */
+.fila-prediccion {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* el input ocupa todo el espacio disponible en la fila */
+.fila-prediccion input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* texto con perdida inicial / final / reduccion */
+#info-perdida {
+    color: #555;
+    font-size: 14px;
+}
+
+/* caja del texto de estado */
+#estado {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+/* lista de resultados de la prediccion */
+#resultados ul {
+    padding-left: 20px;
+}
